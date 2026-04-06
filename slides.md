@@ -190,6 +190,8 @@ layout: two-cols
 ![](https://raw.githubusercontent.com/Admol/SystemDesign/main/images/chapter12/figure12-5.jpg)
 
 ---
+layout: two-cols
+---
 
 # 資料儲存系統
 
@@ -197,32 +199,47 @@ layout: two-cols
 
 <br>
 
-<v-switch>
-<template #1>
-
 兩種資料：
 - 通用型資料
 
 - 聊天歷史資料
 
-</template>
-<template #2>
+<br>
+<br>
+<br>
+<br>
 
-兩種資料：
-- 通用型資料 --> RDBMS
-
-- 聊天歷史資料 --> 鍵值儲存系統
-
-<br>
-<br>
-<br>
-<br>
+<v-click at="2">
 
 第 6 章有討論怎麼設計 鍵值儲存系統
-</template>
-</v-switch>
 
+</v-click>
 
+::right::
+
+<br>
+<br>
+
+<v-click at="1">
+
+聊天歷史資料
+- 資料量非常龐大
+- 通常只有最近的聊天內容才會被頻繁讀取
+- 但也有可能需要過去資料，e.g. 搜尋、查看被提及的內容、跳轉到特定訊息
+- 一對一讀寫比是 1:1
+
+</v-click>
+
+<br>
+
+<v-click at="2">
+
+鍵值儲存系統
+- 可以輕易水平擴展
+- 低延遲
+- 關聯式資料庫無法處理長尾型資料，索引越大，效能越差
+
+</v-click>
 
 
 

@@ -135,7 +135,7 @@ layout: two-cols
 - HTTP
   - 輪詢 (Polling)
   - 長輪詢 (Long Polling)
-- Websocket
+- WebSocket
 
 </v-click>
 

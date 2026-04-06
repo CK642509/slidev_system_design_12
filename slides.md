@@ -218,7 +218,7 @@ layout: two-cols
 <br>
 <br>
 
-第 6 章有討論怎麼設計 KV Store
+第 6 章有討論怎麼設計 鍵值儲存系統
 </template>
 </v-switch>
 

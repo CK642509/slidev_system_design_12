@@ -17,6 +17,10 @@ transition: slide-left
 mdc: true
 ---
 
+## 內行人才知道的系統設計面試指南
+
+<br>
+
 # 第 12 章：設計聊天系統
 
 <br>
@@ -155,21 +159,123 @@ layout: two-cols
 
 # 資料儲存系統
 
-1. RDBMS
-2. KV Store --> 第 6 章有討論怎麼設計 KV Store
+資料類型
 
+<br>
+
+<v-switch>
+<template #1>
+
+兩種資料：
+- 通用型資料
+
+- 聊天歷史資料
+
+</template>
+<template #2>
+
+兩種資料：
+- 通用型資料 --> RDBMS
+
+- 聊天歷史資料 --> 鍵值儲存系統
+
+<br>
+<br>
+<br>
+<br>
+
+第 6 章有討論怎麼設計 KV Store
+</template>
+</v-switch>
+
+
+
+
+
+---
+layout: two-cols
 ---
 
 # 資料儲存系統
 
-1. 資料模型
-2. Message ID
+資料模型
+
+<div class="class: flex justify-center items-center">
+  <img
+    class="w-95"
+    src="https://raw.githubusercontent.com/Admol/SystemDesign/main/images/chapter12/figure12-9.jpg"
+    alt=""
+  />
+</div>
+
+::right::
+
+<br>
+<br>
+<br>
+
+<div class="class: flex justify-center items-center">
+  <img
+    class="w-95"
+    src="https://raw.githubusercontent.com/Admol/SystemDesign/main/images/chapter12/figure12-10.jpg"
+    alt=""
+  />
+</div>
+
+---
+layout: TwoCols75
+---
+
+# 資料儲存系統
+
+訊息 ID
+
+- `message_id` 必須是 unique
+- 理想上是依照時間排序
+
+<br>
+
+<v-click>
+
+- auto_increment 通常可以，但 NoSQL 通常沒有
+- 參考第 7 章：設計可用於分散式系統的唯一 ID 生成器
+  - snowflake 
+  - UUID v7
+  - Redis Incr
+
+</v-click>
+
+::right::
+
+<div class="class: flex justify-center items-center">
+  <img
+    class="w-60"
+    src="https://raw.githubusercontent.com/Admol/SystemDesign/main/images/chapter12/figure12-9.jpg"
+    alt=""
+  />
+</div>
+
+<br>
+
+<div class="class: flex justify-center items-center">
+  <img
+    class="w-60"
+    src="https://raw.githubusercontent.com/Admol/SystemDesign/main/images/chapter12/figure12-10.jpg"
+    alt=""
+  />
+</div>
 
 ---
 layout: two-cols
 ---
 
 # 架構圖
+
+1. 無狀態服務
+2. 有狀態服務
+3. 第三方整合
+4. 通訊協定
+5. 鍵值儲存系統
 
 ::right::
 
@@ -192,7 +298,10 @@ layout: two-cols
 
 # 服務探索
 
-1. OOO
+1. 使用者 A 嘗試登入到 APP
+2. 負載平衡器把登入請求發送到 API 伺服器
+3. 後端對使用者進行身分驗證後，服務探索就會幫使用者 A 找出最佳的聊天伺服器
+4. 使用者 A 透過 WebSocket 連接到聊天伺服器
 
 ::right::
 
@@ -204,7 +313,14 @@ layout: two-cols
 
 # 訊息傳遞流程 - 一對一
 
-1. OOO
+1. 使用者 A 向聊天伺服器 #1 發送聊天訊息
+2. 聊天伺服器 #1 從 ID 生成器取得 `message_id`
+3. 聊天伺服器 #1 把訊息發送給訊息同步佇列 (message sync queue)
+4. 這個訊息會儲存到鍵值儲存系統中
+5. 使用者 B
+   - 正在連線：訊息轉發到使用者 B 所連接的聊天伺服器 #2
+   - 已離線：從推送通知伺服器發送出一個推送通知
+6. 聊天伺服器 #2 會把訊息轉發給使用者 B
 
 ::right::
 
@@ -216,7 +332,10 @@ layout: two-cols
 
 # 訊息傳遞流程 - 多裝置同步
 
-1. OOO
+- 每個裝置都有一個 `cur_max_message_id`
+- 檢查鍵值儲存系統是否存在：
+  - 訊息接受者 ID = 登入使用者 ID
+  - `message_id` > `cur_max_message_id`
 
 ::right::
 
@@ -231,9 +350,15 @@ layout: two-cols
 
 # 訊息傳遞流程 - 群組
 
-<br>
+小群組
 
-![](https://raw.githubusercontent.com/Admol/SystemDesign/main/images/chapter12/figure12-14.jpg)
+<div class="class: flex justify-center items-center">
+  <img
+    class="w-95"
+    src="https://raw.githubusercontent.com/Admol/SystemDesign/main/images/chapter12/figure12-14.jpg"
+    alt=""
+  />
+</div>
 
 ::right::
 
@@ -241,7 +366,13 @@ layout: two-cols
 <br>
 <br>
 
-![](https://raw.githubusercontent.com/Admol/SystemDesign/main/images/chapter12/figure12-15.jpg)
+<div class="class: flex justify-center items-center">
+  <img
+    class="w-95"
+    src="https://raw.githubusercontent.com/Admol/SystemDesign/main/images/chapter12/figure12-15.jpg"
+    alt=""
+  />
+</div>
 
 ---
 layout: two-cols
@@ -257,6 +388,8 @@ layout: two-cols
 
 ::right::
 
+心跳 (heartbeat) 機制
+
 ![](https://raw.githubusercontent.com/Admol/SystemDesign/main/images/chapter12/figure12-18.jpg)
 
 ---
@@ -265,8 +398,33 @@ layout: two-cols
 
 # 連線狀態指示
 
+小群組
+
 4. 扇出 (fanout)
 
 ::right::
 
 ![](https://raw.githubusercontent.com/Admol/SystemDesign/main/images/chapter12/figure12-19.jpg)
+
+
+---
+
+# 其他
+
+1.  錯誤處理
+    1.  聊天伺服器錯誤
+    2.  訊息重發
+2.  支援圖片、影片
+3.  端對端加密
+4.  客戶端快取
+
+---
+
+<br><br><br><br>
+<br><br><br><br>
+
+<div class="flex justify-center">
+
+# Thank you
+
+</div>

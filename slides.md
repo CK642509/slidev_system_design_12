@@ -13,7 +13,7 @@ info: |
 class: text-center
 drawings:
   persist: false
-transition: slide-left
+# transition: slide-left
 mdc: true
 ---
 
@@ -468,6 +468,14 @@ layout: two-cols
 2.  支援圖片、影片
 3.  端對端加密
 4.  客戶端快取
+
+---
+
+# 參考資料
+
+- [ByteByteGo - Design a Chat System](https://bytebytego.com/courses/system-design-interview/design-a-chat-system)
+- [第12章：设计一个聊天系统](https://github.com/Admol/SystemDesign/blob/main/CHAPTER%2012%EF%BC%9ADESIGN%20A%20CHAT%20SYSTEM.md)
+- [ExplainThis E+ 成長計劃：設計聊天系統](https://www.notion.so/explainthisio/Chat-System-ad66d9822882417ea52fe8614802bc5e)
 
 ---
 
